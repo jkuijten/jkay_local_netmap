@@ -13,7 +13,7 @@ define('DB_CHARSET','utf8mb4');
 define('DB_SOCKET', '/run/mysqld/mysqld10.sock');
 
 // ── Netwerk ───────────────────────────────────────────────────
-define('SCAN_SUBNET',   '192.168.2.0/24');
+define('SCAN_SUBNET',   '192.168.1.0/24');
 define('SCAN_INTERVAL', 5);
 define('OFFLINE_AFTER', 600);
 define('GONE_AFTER',    3600);
