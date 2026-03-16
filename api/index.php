@@ -1,13 +1,11 @@
 <?php
 // api/index.php — JSON REST API voor NetMap (PHP 7.4 compatibel)
-// Logging error can be disabled when in working condition
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-//
+
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/scanner.php';
 require_once __DIR__ . '/../includes/exporter.php';
+require_once __DIR__ . '/../includes/fingbox.php';
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -138,6 +136,31 @@ try {
         header('Content-Type: text/html; charset=utf-8');
         readfile($filepath);
         exit;
+
+    // ── Fingbox sync ─────────────────────────────────────────
+    } elseif ($action === 'fingbox_sync') {
+        $apiUrl = $body['url']     ?? FINGBOX_URL;
+        $apiKey = $body['api_key'] ?? FINGBOX_API_KEY;
+        if (!$apiUrl || !$apiKey) {
+            err('Fingbox URL en API key verplicht'); return;
+        }
+        $result = Fingbox::sync($apiUrl, $apiKey);
+        ok($result);
+
+    // ── Fingbox config opslaan ────────────────────────────────
+    } elseif ($action === 'fingbox_config') {
+        $apiUrl = trim($body['url']     ?? '');
+        $apiKey = trim($body['api_key'] ?? '');
+        if (!$apiUrl || !$apiKey) { err('URL en API key verplicht'); return; }
+        // Sla op in config.php
+        $cfgFile = __DIR__ . '/../includes/config.php';
+        $cfg     = file_get_contents($cfgFile);
+        $cfg = preg_replace("/define\('FINGBOX_URL',\s*'[^']*'\)/",
+                            "define('FINGBOX_URL', '" . addslashes($apiUrl) . "')", $cfg);
+        $cfg = preg_replace("/define\('FINGBOX_API_KEY',\s*'[^']*'\)/",
+                            "define('FINGBOX_API_KEY', '" . addslashes($apiKey) . "')", $cfg);
+        file_put_contents($cfgFile, $cfg);
+        ok(array('message' => 'Fingbox instellingen opgeslagen'));
 
     // ── Status ───────────────────────────────────────────────
     } elseif ($action === 'status') {

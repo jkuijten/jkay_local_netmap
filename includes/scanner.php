@@ -2,10 +2,7 @@
 // includes/scanner.php — Netwerk scanner (ARP + /proc/net/arp)
 // Aangepast voor DS1511+: geen ping (raw socket geblokkeerd),
 // leest /proc/net/arp direct, detecteert subnet automatisch
-// error logging, can be disabled wen in working condition
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-//
+
 require_once __DIR__ . '/db.php';
 
 class Scanner {
