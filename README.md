@@ -53,6 +53,9 @@ vi /etc/crontab
 # Voeg toe (elke 5 minuten):
 */5 * * * *  root  php /volume1/web/netmap/cron/scan.php >> /tmp/netmap.log 2>&1
 ```
+###
+Auto scan kan ook worden aangemaakt via taken in de scheduling app van synology zelf;
+##########
 
 ## Gebruik
 - **Browser**: `http://jouw-nas-ip/netmap/`
