@@ -7,7 +7,7 @@
 define('DB_HOST', 'localhost');
 define('DB_NAME',   'netmap');
 define('DB_USER',   'netmap_user');
-define('DB_PASS',   'NetMap2024!');
+define('DB_PASS',   'password');
 define('DB_CHARSET','utf8mb4');
 // Synology MariaDB 10 socket pad
 define('DB_SOCKET', '/run/mysqld/mysqld10.sock');
